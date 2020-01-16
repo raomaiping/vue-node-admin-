@@ -20,9 +20,9 @@ const passport = require("passport");
 // $route  GET  api/users/test
 // @desc   返回的请求的json数据
 // @access public
-// router.get("/test",(req,res) => {
-//     res.json({msg:"login works"})
-// })
+router.get("/test",(req,res) => {
+    res.json({msg:"login works"})
+})
 
 // $route  POST  api/users/register
 // @desc   返回的请求的json数据
