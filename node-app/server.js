@@ -7,6 +7,9 @@ const app = express();
 //引入users.js
 const users = require("./routes/api/users");
 
+//引入profiles.js
+const profiles = require("./routes/api/profiles");
+
 //DB confing
 const db = require("./config/keys").mongoURI;
 
@@ -35,6 +38,7 @@ require("./config/passport")(passport);
 
 //使用routers
 app.use("/api/users",users);
+app.use("/api/profiles",profiles);
 
 
 
