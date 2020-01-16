@@ -1,7 +1,7 @@
 //@login & register
 const express = require("express");
 const router = express.Router();
-
+const keys = require("../../config/keys");
 //引入加密模块
 const bcrypt = require("bcryptjs");
 
@@ -10,6 +10,11 @@ const  User = require("../../models/User");
 
 //引入全球公认头像模块
 const gravatar = require('gravatar');
+
+//引入jwt实现token
+const jwt = require("jsonwebtoken");
+
+
 
 // $route  GET  api/users/test
 // @desc   返回的请求的json数据
@@ -75,7 +80,19 @@ router.post("/login",(req,res) => {
             bcrypt.compare(password, user.password)
                   .then(isMatch => {
                       if(isMatch){
-                        res.json({msg:"success"});
+                        //定义加密规则
+                        const rule = {id:user.id,name:user.name};
+
+                        // jwt.sign("规则","加密名字","过期时间","箭头函数");
+                        jwt.sign(rule,keys.secretOrKey,{expiresIn:3600},(err,token) =>{
+                            if(err) throw err;
+                            res.json({
+                                success:true,
+                                token:"rao" + token
+                            });
+
+                        });
+                        // res.json({msg:"success"});
                       }else{
                         return res.status(400).json({password:"密码错误"});
                     }
