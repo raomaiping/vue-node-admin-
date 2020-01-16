@@ -1,11 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const db = require("./config/keys").mongoURI;
+const bodyParser = require("body-parser");
 const app = express();
+
 
 //引入users.js
 const users = require("./routes/api/users");
 
+//DB confing
+const db = require("./config/keys").mongoURI;
+
+//使用body-parser中间件
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 mongoose.connect(db,{ useNewUrlParser: true,useUnifiedTopology: true })
 .then( () => console.log('MongoDB Connected'))
