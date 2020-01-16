@@ -14,7 +14,8 @@ const gravatar = require('gravatar');
 //引入jwt实现token
 const jwt = require("jsonwebtoken");
 
-
+//引入passport实现token验证
+const passport = require("passport");
 
 // $route  GET  api/users/test
 // @desc   返回的请求的json数据
@@ -88,7 +89,7 @@ router.post("/login",(req,res) => {
                             if(err) throw err;
                             res.json({
                                 success:true,
-                                token:"rao" + token
+                                token:"Bearer " + token
                             });
 
                         });
@@ -96,9 +97,20 @@ router.post("/login",(req,res) => {
                       }else{
                         return res.status(400).json({password:"密码错误"});
                     }
-                  })
-                  
+                  })    
         })
+})
+
+
+// $route  GET  api/users/current
+// @desc   return current user
+// @access Private
+router.get("/current",passport.authenticate("jwt",{session:false}),(req,res) => {
+    res.json({
+        id:req.user.id,
+        name:req.user.name,
+        email:req.user.email
+    });
 })
 
 module.exports = router;

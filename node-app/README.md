@@ -7,4 +7,5 @@ MongoDB 插件 npm i mongoose --save
 body-parser 获取post请求插件 npm i body-parser
 bcryptjs 加密模块 npm i bcryptjs 参考文档：https://www.npmjs.com/package/bcrypt
 gravatar 全球公认头像 npm i gravatar 参考文档：https://www.npmjs.com/package/gravatar
-jsonwebtoken node jwt验证模块 npm i jsonwebtoken 参考文档：https://www.npmjs.com/package/jsonwebtoken
+jsonwebtoken jwt实现token  npm i jsonwebtoken 参考文档：https://www.npmjs.com/package/jsonwebtoken
+passport-jwt passport 实现token验证 npm i passport-jwt passport

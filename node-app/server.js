@@ -10,16 +10,27 @@ const users = require("./routes/api/users");
 //DB confing
 const db = require("./config/keys").mongoURI;
 
+//引入passport
+const passport = require("passport");
+
 //使用body-parser中间件
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+
 mongoose.connect(db,{ useNewUrlParser: true,useUnifiedTopology: true })
 .then( () => console.log('MongoDB Connected'))
 .catch( err => console.log(err));
-app.get("/",(req,res) =>{
-    res.send("Hello World!");
-})
+
+//passport 初始化
+app.use(passport.initialize());
+
+require("./config/passport")(passport);
+
+
+// app.get("/",(req,res) =>{
+//     res.send("Hello World!");
+// })
 
 
 //使用routers
