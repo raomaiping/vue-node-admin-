@@ -25,6 +25,10 @@ mongoose.connect(db,{ useNewUrlParser: true,useUnifiedTopology: true })
 .then( () => console.log('MongoDB Connected'))
 .catch( err => console.log(err));
 
+//避免使用findOneAndUpdate()更新数据库的时候出现警告信息
+mongoose.set('useFindAndModify', false);
+
+
 //passport 初始化
 app.use(passport.initialize());
 
