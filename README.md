@@ -9,7 +9,7 @@
 前端ui组件采用element-ui   npm i element-ui -S
 开发依赖：
 axios 数据交互模块     npm i axios
-
+jwt-decode 解析token模块 npm i jwt-decode 
 
 
 
