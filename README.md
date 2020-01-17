@@ -6,7 +6,7 @@
 
 
 
-
+前端ui组件采用element-ui   npm i element-ui -S
 
 
 
