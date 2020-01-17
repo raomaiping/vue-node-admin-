@@ -18,17 +18,17 @@
           </el-form-item>
 
           <el-form-item type="password" label="确认密码" prop="password2">
-            <el-input v-model="registerUser.name" placeholder="请确认密码"></el-input>
+            <el-input v-model="registerUser.password2" placeholder="请确认密码"></el-input>
           </el-form-item>
 
-          <el-form-item  label="选择身份">
-              <el-select v-model="registerUser.identity" placeholder="请选择身份">
-                  <el-option label="管理员" value="manger"></el-option>
-                  <el-option label="员工" value="employee"></el-option>
-              </el-select>
+          <el-form-item label="选择身份">
+            <el-select v-model="registerUser.identity" placeholder="请选择身份">
+              <el-option label="管理员" value="manger"></el-option>
+              <el-option label="员工" value="employee"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit_btn" @click="subForm('registerForm')">注册</el-button>
+            <el-button type="primary" class="submit_btn" @click="submitForm('registerForm')">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -41,15 +41,91 @@
 export default {
   name: "register",
   components: {},
-  data(){
-    return {
-      registerUser:{
-        name:"",
-        email:"",
-        password:"",
-        password2:"",
-        identity:""
+  data() {
+    let validatePass2 = (rule, value, callback) => {
+      if (value !== this.registerUser.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
       }
+    };
+    return {
+      registerUser: {
+        name: "",
+        email: "",
+        password: "",
+        password2: "",
+        identity: ""
+      },
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "用户名不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            max: 30,
+            message: "长度在2到30个字符之间",
+            trigger: "blur"
+          }
+        ],
+        email: [
+          {
+            required: true,
+            message: "邮箱不能为空",
+            trigger: "blur"
+          },
+          {
+            type: "email",
+            message: "邮箱格式不正确",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "密码不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在6到30之间",
+            trigger: "blur"
+          }
+        ],
+        password2: [
+          {
+            required: true,
+            message: "确认密码不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在6到30之间",
+            trigger: "blur"
+          },
+          {
+            validator: validatePass2,
+            trigger: "blur"
+          }
+        ]
+      }
+    };
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     }
   }
 };
@@ -90,5 +166,4 @@ export default {
 .submit_btn {
   width: 100%;
 }
-
 </style>
