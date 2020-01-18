@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 //引入User数据模型
-const  Profile = require("../../models/Profile");
+const Profile = require("../../models/Profile");
 
 //引入passport实现token验证
 const passport = require("passport");
@@ -11,25 +11,29 @@ const passport = require("passport");
 // $route  GET  api/profiles/test
 // @desc   返回的请求的json数据
 // @access public
-router.get("/test",(req,res) => {
-    res.json({msg:"profiles works"})
+router.get("/test", (req, res) => {
+    res.json({
+        msg: "profiles works"
+    })
 });
 
 
 // $route  POST  api/profiles/add
 // @desc   创建信息接口
 // @access Private
-router.post("/add",passport.authenticate("jwt",{ session:false }),(req,res) =>{
+router.post("/add", passport.authenticate("jwt", {
+    session: false
+}), (req, res) => {
     const profileFields = {};
 
-    if(req.body.type) profileFields.type = req.body.type;
-    if(req.body.describe) profileFields.describe = req.body.describe;
-    if(req.body.income) profileFields.income = req.body.income;
-    if(req.body.expend) profileFields.expend = req.body.expend;
-    if(req.body.cash) profileFields.cash = req.body.cash;
-    if(req.body.remark) profileFields.remark = req.body.remark;
+    if (req.body.type) profileFields.type = req.body.type;
+    if (req.body.describe) profileFields.describe = req.body.describe;
+    if (req.body.income) profileFields.income = req.body.income;
+    if (req.body.expend) profileFields.expend = req.body.expend;
+    if (req.body.cash) profileFields.cash = req.body.cash;
+    if (req.body.remark) profileFields.remark = req.body.remark;
 
-    new Profile(profileFields).save().then( profile => {
+    new Profile(profileFields).save().then(profile => {
         res.json(profile)
     })
 });
@@ -39,16 +43,18 @@ router.post("/add",passport.authenticate("jwt",{ session:false }),(req,res) =>{
 // @desc   获取所有信息
 // @access Private
 
-router.get("/",passport.authenticate("jwt",{ session:false }),(req,res) =>{
+router.get("/", passport.authenticate("jwt", {
+    session: false
+}), (req, res) => {
     Profile.find()
-           .then(profile => {
-               if(!profile){
-                   return res.status(404).json("没有任何内容");
-               }
+        .then(profile => {
+            if (!profile) {
+                return res.status(404).json("没有任何内容");
+            }
 
-               res.json(profile);
-           })
-           .catch(err => res.status(404).json(err));
+            res.json(profile);
+        })
+        .catch(err => res.status(404).json(err));
 
 });
 
@@ -57,15 +63,19 @@ router.get("/",passport.authenticate("jwt",{ session:false }),(req,res) =>{
 // @desc   获取单个信息
 // @access Private
 
-router.get("/:id",passport.authenticate("jwt",{ session:false }),(req,res) =>{
-    Profile.findOne({_id:req.params.id})
-           .then(profile => {
-               if(!profile){
-                   return res.status(404).json("没有任何内容");
-               }
-               res.json(profile);
-           })
-           .catch(err => res.status(404).json(err));
+router.get("/:id", passport.authenticate("jwt", {
+    session: false
+}), (req, res) => {
+    Profile.findOne({
+            _id: req.params.id
+        })
+        .then(profile => {
+            if (!profile) {
+                return res.status(404).json("没有任何内容");
+            }
+            res.json(profile);
+        })
+        .catch(err => res.status(404).json(err));
 
 });
 
@@ -73,36 +83,49 @@ router.get("/:id",passport.authenticate("jwt",{ session:false }),(req,res) =>{
 // $route  POST  api/profiles/edit
 // @desc   编辑信息接口
 // @access Private
-router.post("/edit/:id",passport.authenticate("jwt",{ session:false }),(req,res) =>{
+router.post("/edit/:id", passport.authenticate("jwt", {
+    session: false
+}), (req, res) => {
     const profileFields = {};
 
-    if(req.body.type) profileFields.type = req.body.type;
-    if(req.body.describe) profileFields.describe = req.body.describe;
-    if(req.body.income) profileFields.income = req.body.income;
-    if(req.body.expend) profileFields.expend = req.body.expend;
-    if(req.body.cash) profileFields.cash = req.body.cash;
-    if(req.body.remark) profileFields.remark = req.body.remark;
+    if (req.body.type) profileFields.type = req.body.type;
+    if (req.body.describe) profileFields.describe = req.body.describe;
+    if (req.body.income) profileFields.income = req.body.income;
+    if (req.body.expend) profileFields.expend = req.body.expend;
+    if (req.body.cash) profileFields.cash = req.body.cash;
+    if (req.body.remark) profileFields.remark = req.body.remark;
 
-    Profile.findOneAndUpdate(
-        {_id:req.params.id},
-        {$set:profileFields},
-        {new:true}
-    ).then(profile => res.json(profile))
+    Profile.findOneAndUpdate({
+        _id: req.params.id
+    }, {
+        $set: profileFields
+    }, {
+        new: true
+    }).then(profile => res.json(profile))
 });
 
 // $route  DELETE  api/profiles/delete/:id
 // @desc  删除信息接口
 // @access Private
 
-router.delete('/delete/:id',passport.authenticate('jwt', { session: false }),(req, res) => {
-      Profile.findOneAndRemove({_id: req.params.id },(err,profile) => {
-            if(err){
-                res.status(404).json("删除失败");
-                throw err;
-            } 
-            res.status(200).json(profile);
-      })
-    });
+// router.delete('/delete/:id',passport.authenticate('jwt', { session: false }),(req, res) => {
+//       Profile.findOneAndRemove({_id: req.params.id },(err,profile) => {
+//             if(err){
+//                 res.status(404).json("删除失败");
+//                 throw err;
+//             } 
+//             res.status(200).json(profile);
+//       })
+//     });
+
+
+    router.delete('/delete/:id',passport.authenticate('jwt', { session: false }),(req, res) => {
+        Profile.findOneAndRemove({_id: req.params.id })
+            .then(profile => res.status(200).json(profile))
+            .catch(err => res.status(404).json('删除失败'));
+      });
+
+
 
 
 
