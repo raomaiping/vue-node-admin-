@@ -23,7 +23,7 @@
 
           <el-form-item label="选择身份">
             <el-select v-model="registerUser.identity" placeholder="请选择身份">
-              <el-option label="管理员" value="manger"></el-option>
+              <el-option label="管理员" value="manager"></el-option>
               <el-option label="员工" value="employee"></el-option>
             </el-select>
           </el-form-item>
@@ -119,6 +119,8 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
+        // console.log(this.registerUser);
+        
         if (valid) {
           this.$axios.post("/api/users/register",this.registerUser)
           .then(res => {
