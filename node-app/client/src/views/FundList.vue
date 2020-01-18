@@ -1,45 +1,105 @@
 <template>
   <div class="fillContainer">
     <div>
-      <el-form :inline="true" ref="add_data">
+      <el-form :inline="true"
+               ref="add_data">
         <el-form-item class="btnRight">
-          <el-button type="primary" size="small" icon="view" @click="handleAdd()">
+          <el-button type="primary"
+                     size="small"
+                     icon="view"
+                     @click="handleAdd()">
             添加
           </el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="table_container">
-      <el-table v-if="tableData.length > 0" :data="tableData" style="width: 100%" max-height="450" border>
-        <el-table-column type="index" label="序号" width='70' align="center"> </el-table-column>
-        <el-table-column prop="date" label="创建时间" width='250' align="center"> </el-table-column>
-        <el-table-column prop="type" label="收支类型" width='120' align="center"> </el-table-column>
-        <el-table-column prop="describe" label="收支描述" width='120' align="center"> </el-table-column>
-        <el-table-column prop="income" label="收入" width='120' align="center">
+      <el-table v-if="tableData.length > 0"
+                :data="tableData"
+                style="width: 100%"
+                max-height="450"
+                border>
+        <el-table-column type="index"
+                         label="序号"
+                         width='70'
+                         align="center"> </el-table-column>
+        <el-table-column prop="date"
+                         label="创建时间"
+                         width='250'
+                         align="center"> </el-table-column>
+        <el-table-column prop="type"
+                         label="收支类型"
+                         width='120'
+                         align="center"> </el-table-column>
+        <el-table-column prop="describe"
+                         label="收支描述"
+                         width='120'
+                         align="center"> </el-table-column>
+        <el-table-column prop="income"
+                         label="收入"
+                         width='120'
+                         align="center">
           <template slot-scope="scope">
             <span style="color:#00d053">{{ scope.row.income }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="expend" label="支出" width='120' align="center">
+        <el-table-column prop="expend"
+                         label="支出"
+                         width='120'
+                         align="center">
           <template slot-scope="scope">
             <span style="color:#f56767">{{ scope.row.expend }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="cash" label="账户现金" width='120' align="center">
+        <el-table-column prop="cash"
+                         label="账户现金"
+                         width='120'
+                         align="center">
           <template slot-scope="scope">
             <span style="color:#4db3ff">{{ scope.row.cash }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注" width='150' align="center"> </el-table-column>
-        <el-table-column label="操作" prop="operation" align="center" fixed="right" witdh="180">
+        <el-table-column prop="remark"
+                         label="备注"
+                         width='150'
+                         align="center"> </el-table-column>
+        <el-table-column label="操作"
+                         prop="operation"
+                         align="center"
+                         fixed="right"
+                         witdh="180">
           <template slot-scope="scope">
-            <el-button size="small" type="warning" icon="edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" icon="delete" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="small"
+                       type="warning"
+                       icon="edit"
+                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="small"
+                       type="danger"
+                       icon="delete"
+                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <el-row>
+        <el-col :span='24'>
+          <div class="pagination">
+            <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page.sync="paginations.page_index"
+                           :page-sizes="paginations.page_sizes"
+                           :page-size="paginations.page_size"
+                           :layout="paginations.layout"
+                           :total="paginations.total">
+            </el-pagination>
+          </div>
+        </el-col>
+      </el-row>
+
     </div>
-    <Dialog :dialog="dialog" :formData="formData" @update="getProfile"></Dialog>
+    <Dialog :dialog="dialog"
+            :formData="formData"
+            @update="getProfile"></Dialog>
   </div>
 </template>
 
@@ -49,6 +109,13 @@ export default {
   name: "fundlist",
   data() {
     return {
+      paginations:{
+        page_index:1,//当前位于那页
+        total:0,//总数
+        page_size:5,//一页显示多少条
+        page_sizes:[5,10,15,20], //每页显示多少条
+        layout:"total,sizes,prev,pager,next,jumper" //翻页属性
+      },
       tableData: [],
       formData: {
         type: "",
@@ -99,13 +166,13 @@ export default {
       };
     },
     handleDelete(index, row) {
-      
-      this.$axios.delete(`/api/profiles/delete/${row._id}`)
-      .then(res => {
-        this.$message('删除成功');
-        this.getProfile();
-      })
-      .catch(err =>{});
+      this.$axios
+        .delete(`/api/profiles/delete/${row._id}`)
+        .then(res => {
+          this.$message("删除成功");
+          this.getProfile();
+        })
+        .catch(err => {});
     },
     handleAdd() {
       this.dialog = {
@@ -124,6 +191,12 @@ export default {
         id: ""
       };
       this.dialog.show = true;
+    },
+    handleSizeChange(page_size){
+
+    },
+    handleCurrentChange(page){
+
     }
   },
   components: {
