@@ -117,6 +117,7 @@ export default {
         layout:"total,sizes,prev,pager,next,jumper" //翻页属性
       },
       tableData: [],
+      allTabData:[],
       formData: {
         type: "",
         describe: "",
@@ -142,9 +143,23 @@ export default {
       this.$axios
         .get("/api/profiles")
         .then(res => {
-          this.tableData = res.data;
+          this.allTabData = res.data;
+          //设置分页数据
+          this.setPaginations();
         })
         .catch(err => console.log(err));
+    },
+    setPaginations(){
+      //分页属性设置
+      this.paginations.total = this.allTabData.length;
+      this.paginations.page_index = 1;
+      this.paginations.page_size = 5;
+
+      //设置默认的分页数据
+      this.tableData = this.allTabData.filter((item,index) => {
+        return index < this.paginations.page_size;
+      })
+
     },
     handleEdit(index, row) {
       //编辑
@@ -193,10 +208,30 @@ export default {
       this.dialog.show = true;
     },
     handleSizeChange(page_size){
+      //切换size
+      this.paginations.page_index = 1;
+      this.paginations.page_size = page_size;
+
+      this.tableData = this.allTabData.filter((item,index) => {
+        return index < page_size;
+      })
 
     },
     handleCurrentChange(page){
+      //获取当前页
+      let index = this.paginations.page_size * (page-1);
 
+      //数据总数
+      let nums = this.paginations.page_size * page;
+
+      //容器
+      let tables = [];
+      for (let i = index ;i < nums ; i++){
+        if(this.allTabData[i]){
+          tables.push(this.allTabData[i]);
+        }
+        this.tableData = tables;
+      }
     }
   },
   components: {
